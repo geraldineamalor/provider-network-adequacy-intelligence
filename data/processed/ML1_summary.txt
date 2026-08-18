@@ -1,0 +1,120 @@
+
+# ML-1 DATA ENGINEERING SUMMARY
+
+Project:
+Provider Network Adequacy and Access Intelligence
+
+Role:
+ML-1 - Data Engineering and Geospatial Feature Engineering
+
+## Final Dataset
+
+File:
+provider_network_ml_ready.csv
+
+Rows:
+16,934
+
+Features:
+16
+
+Duplicate rows:
+0
+
+## Data Pipeline
+
+NPPES Provider Data
+        ↓
+Sampling
+        ↓
+Cleaning
+        ↓
+Provider aggregation
+        ↓
+Specialty feature engineering
+        ↓
+ZIP-level geographic aggregation
+        ↓
+2023 ACS ZCTA population integration
+        ↓
+Provider density calculation
+        ↓
+EDA
+        ↓
+ML-ready dataset
+
+## Main Features
+
+- Provider count
+- Individual provider count
+- Organization provider count
+- Unique specialty count
+- Specialty diversity
+- State provider count
+- ZIP share of state providers
+- Individual/organization ratios
+- Population
+- Providers per 10,000 population
+- Individual providers per 10,000 population
+- Organization providers per 10,000 population
+
+## Population Matching
+
+Total provider ZIP records:
+16,934
+
+Population matched:
+16,202
+
+Population missing:
+732
+
+Population match rate:
+95.68%
+
+Density values available:
+16,135
+
+Density values missing:
+799
+
+## Missing Data Strategy
+
+Unmatched population values were retained as missing values.
+
+Missing population was NOT replaced with zero because
+an unmatched Census ZCTA does not imply zero population.
+
+## Important Limitations
+
+1. NPPES was sampled rather than processed in its entirety.
+2. The sample should not be interpreted as the complete US provider network.
+3. ZIP codes and Census ZCTAs are not identical geographic concepts.
+4. Some NPPES records contain special/territory/military-style addresses.
+5. Provider density contains extreme values in low-population areas.
+6. Provider count does not directly represent provider capacity,
+   appointment availability, quality, or actual access.
+7. Final access-gap target definition is owned by ML-2/other project members.
+
+## EDA
+
+Five EDA visualizations were generated:
+
+1. Provider count distribution
+2. Provider density distribution
+3. Specialty diversity distribution
+4. Population distribution
+5. Additional provider/geographic feature analysis
+
+## Handoff
+
+Primary file:
+provider_network_ml_ready.csv
+
+Supporting files:
+provider_geo_features_zip.csv
+census_zip_population_2023.csv
+ML1_data_dictionary.csv
+
+ML-2 can use provider_network_ml_ready.csv as the feature dataset
+for downstream target creation and model development.
