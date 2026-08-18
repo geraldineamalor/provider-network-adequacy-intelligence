@@ -1,0 +1,24 @@
+# Virtual environment
+venv/
+.venv/
+
+# Data files (don't commit datasets)
+data/*.csv
+!data/.gitkeep
+
+# Model artifacts (too large for GitHub)
+artifacts/*.joblib
+artifacts/*.pkl
+!artifacts/.gitkeep
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment variables
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
