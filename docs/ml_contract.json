@@ -1,20 +1,22 @@
 {
-  "model_name": "Provider Access Gap Classifier",
-  "version": "v1.0-baseline",
+  "model_name": "Provider Access Gap Classifier (Random Forest)",
+  "version": "v2.3-context-only",
+  "context": "Predicts access gaps using community context rather than raw provider counts to avoid data leakage.",
   "inference_request_schema": {
     "zip_code": "string",
-    "specialty": "string",
     "features": {
-      "provider_density_per_10k": "float",
-      "medicare_claims_per_provider": "float",
-      "distance_to_nearest_provider_miles": "float"
+      "population": "integer (e.g., 25000)",
+      "zip_provider_share_of_state": "float (0.0 to 1.0, e.g., 0.05)",
+      "individual_provider_ratio": "float (0.0 to 1.0, e.g., 0.75)",
+      "organization_provider_ratio": "float (0.0 to 1.0, e.g., 0.25)"
     }
   },
   "inference_response_schema": {
-    "access_gap_score": "float",
-    "gap_category": "string",
-    "recommendation": "string",
-    "confidence": "float",
-    "explanation": "list"
+    "access_gap_score": "float (0.0 to 1.0, from Random Forest predict_proba)",
+    "gap_category": "string ('high', 'medium', 'low')",
+    "recommendation": "string (e.g., 'Prioritize recruitment: High gap score driven by low state share and high population')",
+    "confidence": "float (0.0 to 1.0)",
+    "explanation": "list of strings (e.g., ['High population density', 'Low share of state providers'])",
+    "model_version": "v2.3-context-only"
   }
 }
