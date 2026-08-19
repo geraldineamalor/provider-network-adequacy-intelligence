@@ -22,6 +22,16 @@ Used to obtain population estimates at the ZCTA/ZIP level.
 Dataset:
 B01003 - Total Population
 
+## Geographic Coordinates and Centroids
+
+ML-1 uses STATE_CLEAN, ZIP_CLEAN, and area_id as geographic identifiers for feature engineering.
+
+ML-1 does not create a competing authoritative centroid dataset.
+
+Authoritative geographic coordinates/area centroids will be handled by BE-3 for application, mapping, and geographic integration.
+
+The ML datasets can be joined to BE-3 geographic data using area_id.
+
 ## Pipeline
 
 NPPES Provider Data
@@ -165,6 +175,7 @@ ML-2 should consider appropriate handling of skewed density variables, including
 
 - ml/ML1_provider_pipeline.ipynb
 - data/processed/provider_network_ml_ready.csv
+- data/processed/provider_network_ml_ready_specialty.csv
 - data/processed/provider_geo_features_zip.csv
 - data/processed/census_zip_population_2023.csv
 - data/processed/ML1_data_dictionary.csv

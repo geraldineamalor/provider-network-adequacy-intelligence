@@ -7,7 +7,7 @@ Provider Network Adequacy and Access Intelligence
 Role:
 ML-1 - Data Engineering and Geospatial Feature Engineering
 
-## Final Dataset
+## Final ZIP-Level Dataset
 
 File:
 provider_network_ml_ready.csv
@@ -43,7 +43,7 @@ EDA
         ↓
 ML-ready dataset
 
-## Main Features
+## Main ZIP-Level Features
 
 - Provider count
 - Individual provider count
@@ -57,6 +57,48 @@ ML-ready dataset
 - Providers per 10,000 population
 - Individual providers per 10,000 population
 - Organization providers per 10,000 population
+
+## Specialty-Level Dataset
+
+File:
+provider_network_ml_ready_specialty.csv
+
+Granularity:
+ZIP/area + PRIMARY_TAXONOMY
+
+Rows:
+165,068
+
+Unique areas:
+16,934
+
+Unique specialties:
+725
+
+Duplicate area_id + PRIMARY_TAXONOMY rows:
+0
+
+Features:
+- area_id
+- STATE_CLEAN
+- ZIP_CLEAN
+- PRIMARY_TAXONOMY
+- specialty_provider_count
+- population
+- specialty_provider_density_per_1000
+
+The specialty-level dataset provides provider availability
+and provider density for each geographic area and provider
+taxonomy.
+
+The area_id is constructed as:
+STATE_CLEAN + "_" + ZIP_CLEAN
+
+This supports downstream API queries using:
+area_id + specialty
+
+PRIMARY_TAXONOMY is retained as the NPPES provider taxonomy
+identifier and is not manually converted into specialty names.
 
 ## Population Matching
 
@@ -85,6 +127,22 @@ Unmatched population values were retained as missing values.
 Missing population was NOT replaced with zero because
 an unmatched Census ZCTA does not imply zero population.
 
+For the specialty-level dataset, density is calculated only
+when population is available and greater than zero.
+
+## Geographic Coordinates and Centroids
+
+ML-1 uses STATE_CLEAN, ZIP_CLEAN, and area_id as geographic
+identifiers for feature engineering.
+
+ML-1 does not create a competing authoritative centroid dataset.
+
+Authoritative geographic coordinates/area centroids will be
+handled by BE-3 for application, mapping, and geographic
+integration.
+
+The ML datasets can be joined to BE-3 geographic data using area_id.
+
 ## Important Limitations
 
 1. NPPES was sampled rather than processed in its entirety.
@@ -94,7 +152,9 @@ an unmatched Census ZCTA does not imply zero population.
 5. Provider density contains extreme values in low-population areas.
 6. Provider count does not directly represent provider capacity,
    appointment availability, quality, or actual access.
-7. Final access-gap target definition is owned by ML-2/other project members.
+7. PRIMARY_TAXONOMY represents an NPPES taxonomy identifier and
+   should not be treated as a manually assigned specialty name.
+8. Final access-gap target definition is owned by ML-2/other project members.
 
 ## EDA
 
@@ -108,13 +168,20 @@ Five EDA visualizations were generated:
 
 ## Handoff
 
-Primary file:
+Primary ZIP-level file:
 provider_network_ml_ready.csv
+
+Specialty-level file:
+provider_network_ml_ready_specialty.csv
 
 Supporting files:
 provider_geo_features_zip.csv
 census_zip_population_2023.csv
 ML1_data_dictionary.csv
 
-ML-2 can use provider_network_ml_ready.csv as the feature dataset
-for downstream target creation and model development.
+ML-2 can use provider_network_ml_ready.csv as the ZIP-level
+feature dataset for downstream target creation and model
+development.
+
+The specialty-level dataset can be used when the downstream
+analysis requires area_id + PRIMARY_TAXONOMY granularity.
