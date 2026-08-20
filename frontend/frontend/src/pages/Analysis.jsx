@@ -28,11 +28,12 @@ const Analysis = () => {
       // When complete, mark final step
       setCurrentStep(steps.length);
       
-      // Get analysis results from API (mock data)
+      // Prepare payload for BE-1: Send NAMES not IDs
+      // BE-1 Contract: { state: "CA", counties: ["Los Angeles"], specialties: ["Cardiology"] }
       const payload = {
-        state: state.code,
-        counties: counties.map(c => c.id),
-        specialties: specialties.map(s => s.id),
+        state: state.code,                        // State code (e.g., "CA")
+        counties: counties.map(c => c.name),      // County NAMES
+        specialties: specialties.map(s => s.name) // Specialty NAMES
       };
       
       const response = await apiService.submitAnalysis(payload);

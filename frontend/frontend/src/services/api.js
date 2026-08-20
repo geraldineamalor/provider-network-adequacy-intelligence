@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// Base API URL - change this when backend is ready
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
+// Base API URL - Updated to match BE-1 contract: /api/v1
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api/v1';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -14,31 +14,30 @@ const api = axios.create({
 const USE_MOCK_DATA = true; // Set to false when backend is ready
 
 /**
- * IMPORTANT: GEOGRAPHIC GRANULARITY ALIGNMENT
+ * API CONTRACT ALIGNMENT WITH BE-1
  * 
- * ML-1 Backend Reality:
- * - Operates at ZIP/ZCTA level (16,934 rows in provider_network_ml_ready.csv)
- * - Each row represents ZIP-level aggregated data
+ * Base URL: http://localhost:8000/api/v1
  * 
- * Current Frontend UX:
- * - Uses State → County selection for better user experience
- * - County is more intuitive for payers/network managers than individual ZIPs
+ * Analysis Endpoint: POST /api/v1/analysis/
  * 
- * Backend Integration Options:
+ * Request Payload Format:
+ * {
+ *   "state": "CA",                        // State code as string
+ *   "counties": ["Los Angeles", "..."],    // County NAMES (not IDs)
+ *   "specialties": ["Cardiology", "..."]   // Specialty NAMES (not IDs)
+ * }
  * 
- * Option 1 (RECOMMENDED): Backend aggregates ZIP data to county level
- * - Backend receives county IDs from frontend
- * - Backend maps counties to ZIPs internally
- * - Backend aggregates ZIP-level metrics to county level
- * - Returns county-level analysis results
+ * Frontend keeps IDs internally for UI selection, but sends NAMES to backend.
  * 
- * Option 2: Change frontend to use "Geographic Areas" or ZIP selection
- * - Replace "Select Counties" with "Select Geographic Areas"
- * - Allow users to select specific ZIP codes or ZIP ranges
- * - Less user-friendly but direct alignment with ML-1 data
+ * GEOGRAPHIC GRANULARITY:
+ * - ML-1 operates at ZIP/ZCTA level (16,934 rows)
+ * - Frontend uses County for better UX
+ * - Backend will need to aggregate ZIP → County internally
  * 
- * Current mock data uses County for UI consistency.
- * Real backend integration will require coordination between FE-1, BE-1, and ML-1.
+ * Current Status:
+ * - Mock data enabled (USE_MOCK_DATA = true)
+ * - API service layer prepared for BE-1 integration
+ * - UI unchanged, only API contract aligned
  */
 
 // Mock Data
@@ -55,9 +54,7 @@ const mockStates = [
   { id: 10, name: 'Michigan', code: 'MI', counties: 83 },
 ];
 
-// Mock Counties - Note: ML-1 backend operates at ZIP/ZCTA level
-// Current UI uses County for user experience, but backend will need to aggregate ZIP data to county level
-// OR: Change UI to use "Geographic Areas" / "ZIP Codes" instead of "Counties"
+// Mock Counties
 const mockCounties = {
   'CA': [
     { id: 1, name: 'Los Angeles', state: 'CA', population: 10000000, lat: 34.0522, lng: -118.2437 },
@@ -82,8 +79,8 @@ const mockCounties = {
   ],
 };
 
-// Mock Specialties - Note: "demand" classification needs to come from backend data
-// Currently using placeholder demand levels - should be removed or derived from actual data
+// Mock Specialties - Keeping ID + name + category for frontend UI
+// Category is frontend-only, not sent to backend
 const mockSpecialties = [
   { id: 1, name: 'Cardiology', category: 'Specialty Care' },
   { id: 2, name: 'Pediatrics', category: 'Primary Care' },
@@ -312,9 +309,15 @@ export const apiService = {
   },
 
   // Submit analysis request
+  // BE-1 Contract: POST /api/v1/analysis/
+  // Payload: { state: "CA", counties: ["Los Angeles"], specialties: ["Cardiology"] }
   submitAnalysis: async (payload) => {
     if (USE_MOCK_DATA) {
       await delay(2000); // Simulate processing time
+      
+      // Log the payload that would be sent to backend (for testing)
+      console.log('[API] Analysis payload prepared for BE-1:', JSON.stringify(payload, null, 2));
+      
       return { 
         data: {
           analysisId: `analysis_${Date.now()}`,
@@ -323,7 +326,9 @@ export const apiService = {
         }
       };
     }
-    const response = await api.post('/analysis', payload);
+    
+    // Real backend call to /api/v1/analysis/
+    const response = await api.post('/analysis/', payload);
     return response;
   },
 
