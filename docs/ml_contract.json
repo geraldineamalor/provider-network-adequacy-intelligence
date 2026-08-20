@@ -1,22 +1,33 @@
 {
-  "model_name": "Provider Access Gap Classifier (Random Forest)",
-  "version": "v2.3-context-only",
-  "context": "Predicts access gaps using community context rather than raw provider counts to avoid data leakage.",
+  "model_name": "Specialty-Aware Provider Access Gap Classifier",
+  "version": "v3.2-specialty-context-merged",
+  "model_type": "random_forest",
+  "description": "Predicts specialty-specific access gaps at the ZCTA level using community context features. Trained on merged ZIP-level context + specialty-level density data with per-specialty bottom-20% target definition.",
   "inference_request_schema": {
-    "zip_code": "string",
+    "zip_code": "string (5-digit zero-padded ZCTA)",
+    "specialty": "string (PRIMARY_TAXONOMY code, e.g., '207R00000X')",
     "features": {
-      "population": "integer (e.g., 25000)",
-      "zip_provider_share_of_state": "float (0.0 to 1.0, e.g., 0.05)",
-      "individual_provider_ratio": "float (0.0 to 1.0, e.g., 0.75)",
-      "organization_provider_ratio": "float (0.0 to 1.0, e.g., 0.25)"
+      "population": "integer (2023 ACS 5-year ZCTA total population)",
+      "zip_provider_share_of_state": "float (0.0-1.0, share of state providers in this ZIP)",
+      "individual_provider_ratio": "float (0.0-1.0, proportion of providers that are individuals)",
+      "organization_provider_ratio": "float (0.0-1.0, proportion of providers that are organizations)",
+      "specialty_diversity": "float (0.0-1.0, specialty diversity index for the ZIP)"
     }
   },
   "inference_response_schema": {
-    "access_gap_score": "float (0.0 to 1.0, from Random Forest predict_proba)",
-    "gap_category": "string ('high', 'medium', 'low')",
-    "recommendation": "string (e.g., 'Prioritize recruitment: High gap score driven by low state share and high population')",
-    "confidence": "float (0.0 to 1.0)",
-    "explanation": "list of strings (e.g., ['High population density', 'Low share of state providers'])",
-    "model_version": "v2.3-context-only"
-  }
+    "access_gap_score": "float (0.0-1.0, probability of being an access gap from predict_proba)",
+    "gap_category": "string ('high' if score >= 0.7, 'medium' if >= 0.4, else 'low')",
+    "recommendation": "string (actionable recruitment guidance based on score and top contributing features)",
+    "confidence": "float (0.0-1.0, mirrors access_gap_score for RF)",
+    "explanation": "list of strings (top 2-3 contributing features from global feature importances)",
+    "model_version": "v3.2-specialty-context-merged"
+  },
+  "feature_importances": {
+    "zip_provider_share_of_state": 0.4014,
+    "PRIMARY_TAXONOMY": 0.2805,
+    "individual_provider_ratio": 0.1594,
+    "organization_provider_ratio": 0.1587
+  },
+  "target_definition": "Bottom 20% of specialty_provider_density_per_1000 within each PRIMARY_TAXONOMY group",
+  "training_data_notes": "Merged provider_network_ml_ready_specialty.csv (165K rows) with provider_network_ml_ready.csv ZIP context on area_id. 799 rows dropped for missing density. Per-specialty thresholds used."
 }
