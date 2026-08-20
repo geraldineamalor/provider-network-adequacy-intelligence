@@ -1,0 +1,75 @@
+{
+  "artifact": "BE-3 FE-2 Map Data Handoff",
+  "artifact_version": "1.0",
+  "created_utc": "2026-08-20T05:14:02.028026+00:00",
+  "source": {
+    "be3_source_file": "be3_final_281478.csv",
+    "source_rows": 281478,
+    "source_columns": 46
+  },
+  "handoff": {
+    "rows": 281478,
+    "columns": 34,
+    "npi_unique": true,
+    "column_count": 34
+  },
+  "coordinate_summary": {
+    "provider_coordinate": 2349,
+    "zcta_centroid": 274994,
+    "unresolved": 4135,
+    "plot_eligible": 277343
+  },
+  "coordinate_policy": {
+    "provider_coordinate": "Actual provider-level Census geocoded coordinate. May be used as provider-level map location.",
+    "zcta_centroid": "Census 2020 ZCTA centroid used as area-level fallback. Must not be presented as an exact provider location.",
+    "unresolved": "No usable spatial coordinate. Do not plot as a point."
+  },
+  "metric_policy": {
+    "provider_level_rows": 2349,
+    "area_level_fallback_rows": 274994,
+    "unresolved_rows": 4135
+  },
+  "feature_groups": {
+    "provider_numeric_features": [
+      "nearest_provider_distance_miles",
+      "second_nearest_provider_distance_miles",
+      "provider_count_5mi",
+      "provider_count_10mi",
+      "provider_count_25mi",
+      "provider_count_50mi",
+      "provider_count_100mi",
+      "same_taxonomy_count_5mi",
+      "same_taxonomy_count_10mi",
+      "same_taxonomy_count_25mi",
+      "same_taxonomy_count_50mi",
+      "same_taxonomy_count_100mi"
+    ],
+    "area_numeric_features": [
+      "area_provider_count_5mi",
+      "area_provider_count_10mi",
+      "area_provider_count_25mi",
+      "area_provider_count_50mi",
+      "area_provider_count_100mi",
+      "area_same_taxonomy_count_5mi",
+      "area_same_taxonomy_count_10mi",
+      "area_same_taxonomy_count_25mi",
+      "area_same_taxonomy_count_50mi",
+      "area_same_taxonomy_count_100mi"
+    ],
+    "total_numeric_features": 22
+  },
+  "validation": {
+    "coordinate_completeness": "PASS",
+    "coordinate_validity": "PASS",
+    "provider_feature_isolation": "PASS",
+    "area_feature_isolation": "PASS",
+    "unresolved_feature_exclusion": "PASS",
+    "non_negative_counts": "PASS",
+    "npi_uniqueness": "PASS"
+  },
+  "files": {
+    "parquet": "be3_fe2_map_handoff_281478.parquet",
+    "csv": "be3_fe2_map_handoff_281478.csv",
+    "manifest": "be3_fe2_map_handoff_manifest.json"
+  }
+}
