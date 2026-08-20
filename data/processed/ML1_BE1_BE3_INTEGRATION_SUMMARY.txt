@@ -1,0 +1,42 @@
+
+ML-1 + BE-1 + BE-3 INTEGRATION SUMMARY
+=======================================
+
+Base ML-1 dataset:
+provider_network_ml_ready_specialty.csv
+
+BE-1:
+specialty_taxonomy_mapping.csv
+
+BE-3:
+be3_final_281478.csv
+
+Final area + specialty dataset:
+provider_network_ml_ready_integrated.csv
+
+BE-3 spatial dataset:
+be3_spatial_features.csv
+
+Final integrated rows:
+165977
+
+Unique areas:
+16934
+
+Unique taxonomy codes:
+725
+
+Unique frontend specialties:
+12
+
+County coverage:
+98.41%
+
+Duplicate area_id + PRIMARY_TAXONOMY:
+909
+
+Integration design:
+- BE-1 maps NPPES PRIMARY_TAXONOMY to approved frontend specialties.
+- BE-3 supplies ZCTA/county geography and provider-level spatial features.
+- Provider-level BE-3 spatial metrics are retained separately.
+- Original ML-1 taxonomy-level data is preserved.
