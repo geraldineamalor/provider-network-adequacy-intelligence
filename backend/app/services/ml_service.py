@@ -5,18 +5,20 @@ import numpy as np
 
 from app.schemas.ml import MLInferenceRequest, MLInferenceResponse
 
-# ML-2 model artifacts (real trained model, v2.4-rf-only)
+# ML-2 model artifacts (real trained model, v3.2-specialty-context-merged)
 MODEL_DIR = Path(__file__).resolve().parent.parent / "models"
 FINAL_MODEL_PATH = MODEL_DIR / "final_model.joblib"
 MODEL_METADATA_PATH = MODEL_DIR / "model_metadata.joblib"
 
-# The trained Random Forest uses ONLY these four numeric features, in this
-# exact order. zip_code is metadata and must never be added as a feature.
+# The trained Random Forest uses these five numeric features, in this
+# exact order. zip_code and primary_taxonomy are metadata and must
+# never be added as features.
 FEATURE_COLUMNS = [
     "population",
     "zip_provider_share_of_state",
     "individual_provider_ratio",
     "organization_provider_ratio",
+    "specialty_diversity",
 ]
 
 # Category thresholds applied to the access gap score (0.0 to 1.0).
@@ -40,7 +42,7 @@ def load_model() -> tuple[object, dict]:
 
 
 def _build_feature_vector(request: MLInferenceRequest) -> np.ndarray:
-    """Build the 4-feature vector for the model. zip_code is excluded."""
+    """Build the 5-feature vector for the model. zip_code is excluded."""
     return np.array(
         [
             [
@@ -48,6 +50,7 @@ def _build_feature_vector(request: MLInferenceRequest) -> np.ndarray:
                 float(request.zip_provider_share_of_state),
                 float(request.individual_provider_ratio),
                 float(request.organization_provider_ratio),
+                float(request.specialty_diversity),
             ]
         ],
         dtype=float,
@@ -74,6 +77,9 @@ def _feature_descriptions(request: MLInferenceRequest) -> dict[str, str]:
         ),
         "organization_provider_ratio": (
             f"Organization provider ratio {request.organization_provider_ratio:.3f}"
+        ),
+        "specialty_diversity": (
+            f"Specialty diversity {request.specialty_diversity:.3f}"
         ),
     }
 
@@ -111,6 +117,7 @@ def predict_gap(request: MLInferenceRequest) -> MLInferenceResponse:
 
     The model is a binary Random Forest; the access gap score is the
     predicted probability of the gap class (class 1).
+    The prediction field contains the predicted class (0 or 1).
     """
     model, metadata = load_model()
 
@@ -120,6 +127,13 @@ def predict_gap(request: MLInferenceRequest) -> MLInferenceResponse:
     access_gap_score = float(proba[GAP_CLASS_INDEX])
     confidence = float(max(proba))
     category = _gap_category(access_gap_score)
+    prediction = model.predict(features)
+
+    # Handle both array and scalar return from model.predict()
+    if isinstance(prediction, np.ndarray):
+        prediction = int(prediction[0])
+    else:
+        prediction = int(prediction)
 
     importances = metadata.get("feature_importances", {})
     explanation = _build_explanation(request, importances)
@@ -129,8 +143,9 @@ def predict_gap(request: MLInferenceRequest) -> MLInferenceResponse:
     return MLInferenceResponse(
         access_gap_score=access_gap_score,
         gap_category=category,
-        recommendation=recommendation,
+        prediction=prediction,
         confidence=confidence,
         explanation=explanation,
         model_version=metadata.get("model_version", "unknown"),
+        recommendation=recommendation,
     )

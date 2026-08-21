@@ -16,15 +16,18 @@ VALID_REQUEST = {
     "zip_provider_share_of_state": 0.05,
     "individual_provider_ratio": 0.75,
     "organization_provider_ratio": 0.25,
+    "specialty_diversity": 0.5,
+    "primary_taxonomy": "207R00000X",
 }
 
 REQUIRED_RESPONSE_FIELDS = {
     "access_gap_score",
     "gap_category",
-    "recommendation",
+    "prediction",
     "confidence",
     "explanation",
     "model_version",
+    "recommendation",
 }
 
 
@@ -75,15 +78,18 @@ def test_contract_input_fields_are_exact():
         "zip_provider_share_of_state",
         "individual_provider_ratio",
         "organization_provider_ratio",
+        "specialty_diversity",
+        "primary_taxonomy",
     }
 
 
-def test_model_features_are_exactly_the_four_numeric_columns():
+def test_model_features_are_exactly_the_five_numeric_columns():
     assert FEATURE_COLUMNS == [
         "population",
         "zip_provider_share_of_state",
         "individual_provider_ratio",
         "organization_provider_ratio",
+        "specialty_diversity",
     ]
     assert "zip_code" not in FEATURE_COLUMNS
 
@@ -102,17 +108,23 @@ class FakePipeline:
     def predict_proba(self, features):
         return np.array([self._proba])
 
+    def predict(self, features):
+        # Return the class with highest probability
+        proba = self.predict_proba(features)[0]
+        return int(self.classes_[np.argmax(proba)])
+
 
 def _mock_model(proba, metadata=None):
     _reset_model()
     ml_service._model = FakePipeline(proba)
     ml_service._metadata = metadata or {
-        "model_version": "v2.4-rf-only",
+        "model_version": "v3.2-specialty-context-merged",
         "feature_importances": {
             "population": 0.44,
             "zip_provider_share_of_state": 0.39,
             "individual_provider_ratio": 0.09,
             "organization_provider_ratio": 0.08,
+            "specialty_diversity": 0.0,
         },
     }
 
@@ -120,15 +132,16 @@ def _mock_model(proba, metadata=None):
 def test_feature_vector_excludes_zip_code():
     request = MLInferenceRequest(**VALID_REQUEST)
     vector = ml_service._build_feature_vector(request)
-    assert vector.shape == (1, 4)
+    assert vector.shape == (1, 5)
     assert vector[0].tolist() == [
         25000.0,
         0.05,
         0.75,
         0.25,
+        0.5,
     ]
     assert "zip_code" not in ml_service._build_feature_vector.__name__  # sanity
-    # The request includes 5 fields; only 4 become features.
+    # The request includes 7 fields; only 5 become features.
     assert vector.shape[1] == len(FEATURE_COLUMNS)
 
 
@@ -172,7 +185,7 @@ def test_confidence_is_max_probability():
 def test_model_version_from_metadata():
     _mock_model([0.2, 0.8])
     response = predict_gap(MLInferenceRequest(**VALID_REQUEST))
-    assert response.model_version == "v2.4-rf-only"
+    assert response.model_version == "v3.2-specialty-context-merged"
 
 
 def test_recommendation_present_for_each_category():
@@ -187,7 +200,7 @@ def test_explanation_lists_features_by_importance():
     _mock_model([0.2, 0.8])
     response = predict_gap(MLInferenceRequest(**VALID_REQUEST))
     assert response.explanation[0].startswith("Population")
-    assert len(response.explanation) == 4
+    assert len(response.explanation) == 5
 
 
 def test_zip_code_value_does_not_affect_prediction():
@@ -209,10 +222,10 @@ def test_real_model_artifact_exists():
     assert ml_service.MODEL_METADATA_PATH.exists()
 
 
-def test_real_model_uses_only_four_features():
+def test_real_model_uses_only_five_features():
     _reset_model()
     model, metadata = ml_service.load_model()
-    assert model.n_features_in_ == 4
+    assert model.n_features_in_ == 5
     assert list(metadata["features_used"]) == FEATURE_COLUMNS
 
 
@@ -222,6 +235,7 @@ def test_real_model_predict_gap_matches_contract():
     assert isinstance(response, MLInferenceResponse)
     assert 0.0 <= response.access_gap_score <= 1.0
     assert response.gap_category in {"high", "medium", "low"}
-    assert response.model_version == "v2.4-rf-only"
-    assert len(response.explanation) == 4
+    assert response.model_version == "v3.2-specialty-context-merged"
+    assert len(response.explanation) == 5
     assert response.recommendation
+    assert response.prediction in {0, 1}
