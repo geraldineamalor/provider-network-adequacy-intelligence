@@ -1,0 +1,88 @@
+{
+  "dataset": "BE-3 → ML-1 Handoff",
+  "source": "be3_final_complete",
+  "status": "ready_for_ml1",
+  "row_count": 281478,
+  "unique_npi_count": 281478,
+  "handoff_column_count": 38,
+  "spatial_feature_count": 22,
+  "provider_level_spatial_feature_count": 12,
+  "area_level_spatial_feature_count": 10,
+  "reference_provider_identifier_count": 2,
+  "provider_level_rows": 2349,
+  "area_level_fallback_rows": 274994,
+  "unresolved_rows": 4135,
+  "feature_groups": {
+    "provider_level": [
+      "nearest_provider_distance_miles",
+      "second_nearest_provider_distance_miles",
+      "provider_count_5mi",
+      "provider_count_10mi",
+      "provider_count_25mi",
+      "provider_count_50mi",
+      "provider_count_100mi",
+      "same_taxonomy_count_5mi",
+      "same_taxonomy_count_10mi",
+      "same_taxonomy_count_25mi",
+      "same_taxonomy_count_50mi",
+      "same_taxonomy_count_100mi"
+    ],
+    "area_level": [
+      "area_provider_count_5mi",
+      "area_provider_count_10mi",
+      "area_provider_count_25mi",
+      "area_provider_count_50mi",
+      "area_provider_count_100mi",
+      "area_same_taxonomy_count_5mi",
+      "area_same_taxonomy_count_10mi",
+      "area_same_taxonomy_count_25mi",
+      "area_same_taxonomy_count_50mi",
+      "area_same_taxonomy_count_100mi"
+    ],
+    "reference_provider_identifiers": [
+      "nearest_provider_npi",
+      "second_nearest_provider_npi"
+    ]
+  },
+  "identifiers": [
+    "NPI"
+  ],
+  "provider_context": [
+    "Entity Type Code",
+    "Provider Organization Name (Legal Business Name)",
+    "Provider Last Name (Legal Name)",
+    "Provider First Name",
+    "Healthcare Provider Taxonomy Code_1",
+    "Healthcare Provider Primary Taxonomy Switch_1"
+  ],
+  "geography": [
+    "zip_clean",
+    "zcta_clean",
+    "county_fips"
+  ],
+  "spatial_metadata": [
+    "spatial_latitude",
+    "spatial_longitude",
+    "spatial_coordinate_type",
+    "spatial_coordinate_source",
+    "spatial_coordinate_confidence",
+    "spatial_metric_policy"
+  ],
+  "policy": {
+    "provider_metrics": "Use only rows with spatial_metric_policy == 'provider_level'.",
+    "area_metrics": "Use only rows with spatial_metric_policy == 'area_level_fallback'.",
+    "unresolved": "Rows with spatial_metric_policy == 'unresolved' have no spatial metrics and must not be assigned synthetic spatial values.",
+    "provider_coordinates": "Provider-level metrics use actual Census-geocoded provider coordinates only.",
+    "area_coordinates": "Area-level metrics use 2020 Census ZCTA centroid fallback coordinates."
+  },
+  "geography_provenance": {
+    "zcta_vintage": "2020",
+    "county_relationship": "2020 Census ZCTA-to-county relationship",
+    "county_selection_rule": "Largest AREALAND_PART within each ZCTA"
+  },
+  "outputs": {
+    "handoff": "/content/drive/MyDrive/data/be3_final/be3_ml1_handoff_281478.parquet",
+    "spatial_features": "/content/drive/MyDrive/data/be3_final/be3_ml1_spatial_features_281478.parquet",
+    "manifest": "/content/drive/MyDrive/data/be3_final/be3_ml1_handoff_manifest.json"
+  }
+}

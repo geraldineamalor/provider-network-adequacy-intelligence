@@ -1,0 +1,326 @@
+{
+  "dataset": "BE-3 Final Geospatial Provider Layer",
+  "stage": "2C-41",
+  "status": "production_ready",
+  "row_count": 281478,
+  "column_count": 46,
+  "primary_key": "NPI",
+  "unique_npi_count": 281478,
+  "spatial_feature_count": 24,
+  "provider_level_spatial_feature_count": 14,
+  "area_level_spatial_feature_count": 10,
+  "provider_level_rows": 2349,
+  "area_level_fallback_rows": 274994,
+  "unresolved_rows": 4135,
+  "county_fips_populated": 276704,
+  "county_fips_missing": 4774,
+  "spatial_coordinates_populated": 277343,
+  "spatial_coordinates_missing": 4135,
+  "provider_level_features": [
+    "nearest_provider_npi",
+    "nearest_provider_distance_miles",
+    "second_nearest_provider_npi",
+    "second_nearest_provider_distance_miles",
+    "provider_count_5mi",
+    "provider_count_10mi",
+    "provider_count_25mi",
+    "provider_count_50mi",
+    "provider_count_100mi",
+    "same_taxonomy_count_5mi",
+    "same_taxonomy_count_10mi",
+    "same_taxonomy_count_25mi",
+    "same_taxonomy_count_50mi",
+    "same_taxonomy_count_100mi"
+  ],
+  "area_level_features": [
+    "area_provider_count_5mi",
+    "area_provider_count_10mi",
+    "area_provider_count_25mi",
+    "area_provider_count_50mi",
+    "area_provider_count_100mi",
+    "area_same_taxonomy_count_5mi",
+    "area_same_taxonomy_count_10mi",
+    "area_same_taxonomy_count_25mi",
+    "area_same_taxonomy_count_50mi",
+    "area_same_taxonomy_count_100mi"
+  ],
+  "all_spatial_features": [
+    "nearest_provider_npi",
+    "nearest_provider_distance_miles",
+    "second_nearest_provider_npi",
+    "second_nearest_provider_distance_miles",
+    "provider_count_5mi",
+    "provider_count_10mi",
+    "provider_count_25mi",
+    "provider_count_50mi",
+    "provider_count_100mi",
+    "same_taxonomy_count_5mi",
+    "same_taxonomy_count_10mi",
+    "same_taxonomy_count_25mi",
+    "same_taxonomy_count_50mi",
+    "same_taxonomy_count_100mi",
+    "area_provider_count_5mi",
+    "area_provider_count_10mi",
+    "area_provider_count_25mi",
+    "area_provider_count_50mi",
+    "area_provider_count_100mi",
+    "area_same_taxonomy_count_5mi",
+    "area_same_taxonomy_count_10mi",
+    "area_same_taxonomy_count_25mi",
+    "area_same_taxonomy_count_50mi",
+    "area_same_taxonomy_count_100mi"
+  ],
+  "columns": [
+    {
+      "position": 1,
+      "name": "NPI",
+      "dtype": "object"
+    },
+    {
+      "position": 2,
+      "name": "Entity Type Code",
+      "dtype": "float64"
+    },
+    {
+      "position": 3,
+      "name": "Provider Organization Name (Legal Business Name)",
+      "dtype": "object"
+    },
+    {
+      "position": 4,
+      "name": "Provider Last Name (Legal Name)",
+      "dtype": "object"
+    },
+    {
+      "position": 5,
+      "name": "Provider First Name",
+      "dtype": "object"
+    },
+    {
+      "position": 6,
+      "name": "Provider First Line Business Practice Location Address",
+      "dtype": "object"
+    },
+    {
+      "position": 7,
+      "name": "Provider Second Line Business Practice Location Address",
+      "dtype": "object"
+    },
+    {
+      "position": 8,
+      "name": "Provider Business Practice Location Address City Name",
+      "dtype": "object"
+    },
+    {
+      "position": 9,
+      "name": "Provider Business Practice Location Address State Name",
+      "dtype": "string"
+    },
+    {
+      "position": 10,
+      "name": "Provider Business Practice Location Address Postal Code",
+      "dtype": "string"
+    },
+    {
+      "position": 11,
+      "name": "Provider Business Practice Location Address Country Code (If outside U.S.)",
+      "dtype": "object"
+    },
+    {
+      "position": 12,
+      "name": "Healthcare Provider Taxonomy Code_1",
+      "dtype": "string"
+    },
+    {
+      "position": 13,
+      "name": "Healthcare Provider Primary Taxonomy Switch_1",
+      "dtype": "object"
+    },
+    {
+      "position": 14,
+      "name": "zip_clean",
+      "dtype": "string"
+    },
+    {
+      "position": 15,
+      "name": "zcta_clean",
+      "dtype": "string"
+    },
+    {
+      "position": 16,
+      "name": "county_fips",
+      "dtype": "string"
+    },
+    {
+      "position": 17,
+      "name": "spatial_latitude",
+      "dtype": "float64"
+    },
+    {
+      "position": 18,
+      "name": "spatial_longitude",
+      "dtype": "float64"
+    },
+    {
+      "position": 19,
+      "name": "spatial_coordinate_type",
+      "dtype": "object"
+    },
+    {
+      "position": 20,
+      "name": "spatial_coordinate_source",
+      "dtype": "object"
+    },
+    {
+      "position": 21,
+      "name": "spatial_coordinate_confidence",
+      "dtype": "object"
+    },
+    {
+      "position": 22,
+      "name": "spatial_metric_policy",
+      "dtype": "object"
+    },
+    {
+      "position": 23,
+      "name": "nearest_provider_npi",
+      "dtype": "object"
+    },
+    {
+      "position": 24,
+      "name": "nearest_provider_distance_miles",
+      "dtype": "float64"
+    },
+    {
+      "position": 25,
+      "name": "second_nearest_provider_npi",
+      "dtype": "object"
+    },
+    {
+      "position": 26,
+      "name": "second_nearest_provider_distance_miles",
+      "dtype": "float64"
+    },
+    {
+      "position": 27,
+      "name": "provider_count_5mi",
+      "dtype": "float64"
+    },
+    {
+      "position": 28,
+      "name": "provider_count_10mi",
+      "dtype": "float64"
+    },
+    {
+      "position": 29,
+      "name": "provider_count_25mi",
+      "dtype": "float64"
+    },
+    {
+      "position": 30,
+      "name": "provider_count_50mi",
+      "dtype": "float64"
+    },
+    {
+      "position": 31,
+      "name": "provider_count_100mi",
+      "dtype": "float64"
+    },
+    {
+      "position": 32,
+      "name": "same_taxonomy_count_5mi",
+      "dtype": "float64"
+    },
+    {
+      "position": 33,
+      "name": "same_taxonomy_count_10mi",
+      "dtype": "float64"
+    },
+    {
+      "position": 34,
+      "name": "same_taxonomy_count_25mi",
+      "dtype": "float64"
+    },
+    {
+      "position": 35,
+      "name": "same_taxonomy_count_50mi",
+      "dtype": "float64"
+    },
+    {
+      "position": 36,
+      "name": "same_taxonomy_count_100mi",
+      "dtype": "float64"
+    },
+    {
+      "position": 37,
+      "name": "area_provider_count_5mi",
+      "dtype": "float64"
+    },
+    {
+      "position": 38,
+      "name": "area_provider_count_10mi",
+      "dtype": "float64"
+    },
+    {
+      "position": 39,
+      "name": "area_provider_count_25mi",
+      "dtype": "float64"
+    },
+    {
+      "position": 40,
+      "name": "area_provider_count_50mi",
+      "dtype": "float64"
+    },
+    {
+      "position": 41,
+      "name": "area_provider_count_100mi",
+      "dtype": "float64"
+    },
+    {
+      "position": 42,
+      "name": "area_same_taxonomy_count_5mi",
+      "dtype": "float64"
+    },
+    {
+      "position": 43,
+      "name": "area_same_taxonomy_count_10mi",
+      "dtype": "float64"
+    },
+    {
+      "position": 44,
+      "name": "area_same_taxonomy_count_25mi",
+      "dtype": "float64"
+    },
+    {
+      "position": 45,
+      "name": "area_same_taxonomy_count_50mi",
+      "dtype": "float64"
+    },
+    {
+      "position": 46,
+      "name": "area_same_taxonomy_count_100mi",
+      "dtype": "float64"
+    }
+  ],
+  "spatial_metric_policy": {
+    "provider_level": 2349,
+    "area_level_fallback": 274994,
+    "unresolved": 4135
+  },
+  "geography_policy": {
+    "county_mapping": "2020 Census ZCTA-to-county relationship; primary county selected by largest AREALAND_PART",
+    "unmatched_county_fips": 4774,
+    "unresolved_spatial_rows": 4135
+  },
+  "coordinate_policy": {
+    "provider_coordinates": "Census geocoder matched provider addresses",
+    "area_coordinates": "2020 Census ZCTA Gazetteer centroid fallback",
+    "provider_metrics_use": "provider-level coordinates only",
+    "area_metrics_use": "ZCTA centroid fallback coordinates"
+  },
+  "files": {
+    "parquet": "/content/drive/MyDrive/data/be3_final/be3_final_281478.parquet",
+    "csv": "/content/drive/MyDrive/data/be3_final/be3_final_281478.csv",
+    "schema": "/content/drive/MyDrive/data/be3_final/be3_final_schema.json"
+  }
+}
