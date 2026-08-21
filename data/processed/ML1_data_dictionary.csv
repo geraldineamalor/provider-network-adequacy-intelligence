@@ -1,0 +1,21 @@
+Feature,Description
+STATE_CLEAN,Standardized provider state or territory code
+ZIP_CLEAN,Five-digit ZIP/ZCTA identifier
+provider_count,Total providers associated with the ZIP
+individual_provider_count,Number of individual providers
+organization_provider_count,Number of organization providers
+unique_specialty_count,Number of distinct provider specialties in the ZIP
+providers_with_specialty,Number of providers with available specialty information
+specialty_diversity_ratio,Specialty diversity relative to total providers
+state_provider_count,Total providers within the state or territory
+zip_provider_share_of_state,Share of state or territory providers located in the ZIP
+individual_provider_ratio,Proportion of providers that are individuals
+organization_provider_ratio,Proportion of providers that are organizations
+population,2023 ACS 5-year ZCTA total population
+providers_per_10000,"Providers per 10,000 population"
+individual_providers_per_10000,"Individual providers per 10,000 population"
+organization_providers_per_10000,"Organization providers per 10,000 population"
+area_id,Stable API-friendly geographic identifier (STATE_CLEAN + '_' + ZIP_CLEAN); used as the join key with BE-3 authoritative geographic/centroid data
+PRIMARY_TAXONOMY,NPPES healthcare provider taxonomy code identifying the provider's primary specialty for a ZIP/area
+specialty_provider_count,Number of unique providers with the given PRIMARY_TAXONOMY within the ZIP/area
+specialty_provider_density_per_1000,"Specialty-level provider density: specialty_provider_count per 1,000 population within the ZIP/area (NaN when population is missing or zero)"
