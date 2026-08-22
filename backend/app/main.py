@@ -2,6 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes.providers import router as providers_router
+from app.api.routes.network_adequacy import (
+    router as network_adequacy_router,
+)
 
 
 app = FastAPI(
@@ -24,6 +27,10 @@ app.add_middleware(
 # Register API routes
 app.include_router(
     providers_router,
+    prefix="/api/v1",
+)
+app.include_router(
+    network_adequacy_router,
     prefix="/api/v1",
 )
 
